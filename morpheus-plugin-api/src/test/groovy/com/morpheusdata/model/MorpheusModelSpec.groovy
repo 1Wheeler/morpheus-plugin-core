@@ -12,7 +12,7 @@ class MorpheusModelSpec extends Specification {
 		def props = model.getProperties()
 
 		then:
-		props.size() == 3
+		props.size() == 4
 	}
 
 	void "NetworkPool.getProperties()"() {
@@ -23,7 +23,7 @@ class MorpheusModelSpec extends Specification {
 		def props = model.getProperties()
 
 		then:
-		props.size() == 30
+		props.size() == 31
 		and: "property of parent is included"
 		props['id'] == 1
 	}
@@ -36,7 +36,7 @@ class MorpheusModelSpec extends Specification {
 		def props = model.getProperties()
 
 		then:
-		props.size() == 38
+		props.size() == 39
 		and: "private properties are unavailable"
 		props['description'] == null
 	}
@@ -115,5 +115,83 @@ class MorpheusModelSpec extends Specification {
 		[zoneId: 345]                                          | '{"zoneId":345}'
 		[capacity: 2.5]                                        | '{"capacity":2.5}'
 		[nested: true, instance: [id: 1, name: 'My Instance']] | '{"nested":true,"instance":{"id":1,"name":"My Instance"}}'
+	}
+
+	void "markDirty - key and new value"() {
+		given:
+		String propertyName = "id"
+		Integer originalValue = 1
+		Integer dirtyValue = 2
+		MorpheusModel model = new MorpheusModel(id: originalValue)
+
+		when:
+		model.id = dirtyValue
+		model.markDirty(propertyName, dirtyValue)
+		def dirtyProperties = model.getDirtyPropertyValues()
+
+		then:
+		dirtyProperties.containsKey(propertyName)
+		dirtyProperties.get(propertyName) == dirtyValue
+	}
+
+	void "markDirty - key, new value, and old value"() {
+		given:
+		String propertyName = "id"
+		Integer originalValue = 1
+		Integer dirtyValue = 2
+		MorpheusModel model = new MorpheusModel(id: originalValue)
+
+		when:
+		model.id = dirtyValue
+		model.markDirty(propertyName, dirtyValue, originalValue)
+		def dirtyProperties = model.getDirtyPropertyValues()
+
+		then:
+		dirtyProperties.containsKey(propertyName)
+		dirtyProperties.get(propertyName) == dirtyValue
+	}
+
+	void "markClean"() {
+		given:
+		String propertyName = "id"
+		Integer originalValue = 1
+		Integer dirtyValue = 2
+		MorpheusModel model = new MorpheusModel(id: originalValue)
+		model.id = dirtyValue
+		model.markDirty(propertyName, dirtyValue, originalValue)
+
+		when:
+		model.markClean()
+		def dirtyProperties = model.getDirtyPropertyValues()
+
+		then:
+		dirtyProperties.containsKey(propertyName) == false
+		dirtyProperties.size() == 0
+	}
+
+	void "isDirty - property is dirty"() {
+		given:
+		String propertyName = "id"
+		Integer originalValue = 1
+		Integer dirtyValue = 2
+		MorpheusModel model = new MorpheusModel(id: originalValue)
+
+		when:
+		model.id = dirtyValue
+		model.markDirty(propertyName, dirtyValue, originalValue)
+		def dirtyProperties = model.getDirtyPropertyValues()
+
+		then:
+		model.isDirty(propertyName) == true
+	}
+
+	void "isDirty - property is not dirty"() {
+		given:
+		String propertyName = "id"
+		Integer originalValue = 1
+		MorpheusModel model = new MorpheusModel(id: originalValue)
+
+		expect:
+		model.isDirty(propertyName) == false
 	}
 }
