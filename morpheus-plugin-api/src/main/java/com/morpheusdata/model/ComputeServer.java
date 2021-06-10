@@ -3,7 +3,9 @@ package com.morpheusdata.model;
 import com.morpheusdata.model.projection.ComputeServerIdentityProjection;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 /**
  * Representation of a Morpheus ComputeServer database object within the Morpheus platform. Not all data is provided
@@ -13,6 +15,7 @@ import java.util.List;
  */
 public class ComputeServer extends ComputeServerIdentityProjection {
 
+	@JsonSerialize(using=ModelAsIdOnlySerializer.class)
 	protected Account account;
 	protected String uuid;
 	protected String displayName;
@@ -49,6 +52,23 @@ public class ComputeServer extends ComputeServerIdentityProjection {
 	protected String externalFqdn;
 	protected String apiKey;
 	protected List<StorageVolume> volumes = new ArrayList<>();
+	protected String osDevice = "/dev/sda";
+	protected String dataDevice = "/dev/sda";
+	protected Boolean lvmEnabled = true;
+	protected String internalId;
+	protected String serverVendor;
+	protected String serverModel;
+	protected String serialNumber;
+	protected String statusMessage;
+	protected String rootVolumeId;
+	protected String tags;
+	protected Boolean enabled = true;
+	protected Boolean provision = true;
+	protected String macAddress;
+	protected ComputeCapacityInfo capacityInfo;
+	protected Boolean agentInstalled;
+	protected Date lastAgentUpdate;
+	protected String agentVersion;
 
 	public String getUuid() {
 		return uuid;
@@ -385,4 +405,156 @@ public class ComputeServer extends ComputeServerIdentityProjection {
 		markDirty("volumes", volumes);
 	}
 
+	public String getOsDevice() {
+		return osDevice;
+	}
+
+	public void setOsDevice(String osDevice) {
+		this.osDevice = osDevice;
+		markDirty("osDevice",osDevice);
+	}
+
+	public String getDataDevice() {
+		return dataDevice;
+	}
+
+	public void setDataDevice(String dataDevice) {
+		this.dataDevice = dataDevice;
+		markDirty("dataDevice",dataDevice);
+	}
+
+	public Boolean getLvmEnabled() {
+		return lvmEnabled;
+	}
+
+	public void setLvmEnabled(Boolean lvmEnabled) {
+		this.lvmEnabled = lvmEnabled;
+		markDirty("lvmEnabled",lvmEnabled);
+	}
+
+	public String getInternalId() {
+		return internalId;
+	}
+
+	public void setInternalId(String internalId) {
+		this.internalId = internalId;
+		markDirty("internalId",internalId);
+	}
+
+	public String getServerVendor() {
+		return serverVendor;
+	}
+
+	public void setServerVendor(String serverVendor) {
+		this.serverVendor = serverVendor;
+		markDirty("serverVendor",serverVendor);
+	}
+
+	public String getServerModel() {
+		return serverModel;
+	}
+
+	public void setServerModel(String serverModel) {
+		this.serverModel = serverModel;
+		markDirty("serverModel",serverModel);
+	}
+
+	public String getSerialNumber() {
+		return serialNumber;
+	}
+
+	public void setSerialNumber(String serialNumber) {
+		this.serialNumber = serialNumber;
+		markDirty("serialNumber",serialNumber);
+	}
+
+	public String getStatusMessage() {
+		return statusMessage;
+	}
+
+	public void setStatusMessage(String statusMessage) {
+		this.statusMessage = statusMessage;
+		markDirty("statusMessage",statusMessage);
+	}
+
+	public String getRootVolumeId() {
+		return rootVolumeId;
+	}
+
+	public void setRootVolumeId(String rootVolumeId) {
+		this.rootVolumeId = rootVolumeId;
+		markDirty("rootVolumeId",rootVolumeId);
+	}
+
+	public String getTags() {
+		return tags;
+	}
+
+	public void setTags(String tags) {
+		this.tags = tags;
+		markDirty("tags",tags);
+	}
+
+	public Boolean getEnabled() {
+		return enabled;
+	}
+
+	public void setEnabled(Boolean enabled) {
+		this.enabled = enabled;
+		markDirty("enabled",enabled);
+	}
+
+	public Boolean getProvision() {
+		return provision;
+	}
+
+	public void setProvision(Boolean provision) {
+		this.provision = provision;
+		markDirty("provision",provision);
+	}
+
+	public String getMacAddress() {
+		return macAddress;
+	}
+
+	public void setMacAddress(String macAddress) {
+		this.macAddress = macAddress;
+		markDirty("macAddress",macAddress);
+	}
+
+	public ComputeCapacityInfo getComputeCapacityInfo() {
+		return capacityInfo;
+	}
+
+	public void setComputeCapacityInfo(ComputeCapacityInfo capacityInfo) {
+		this.capacityInfo = capacityInfo;
+		markDirty("capacityInfo",capacityInfo);
+	}
+
+	public Boolean getAgentInstalled() {
+		return agentInstalled;
+	}
+
+	public void setAgentInstalled(Boolean agentInstalled) {
+		this.agentInstalled = agentInstalled;
+		markDirty("agentInstalled",agentInstalled);
+	}
+
+	public Date getLastAgentUpdate() {
+		return lastAgentUpdate;
+	}
+
+	public void setLastAgentUpdate(Date lastAgentUpdate) {
+		this.lastAgentUpdate = lastAgentUpdate;
+		markDirty("lastAgentUpdate",lastAgentUpdate);
+	}
+
+	public String getAgentVersion() {
+		return agentVersion;
+	}
+
+	public void setAgentVersion(String agentVersion) {
+		this.agentVersion = agentVersion;
+		markDirty("agentVersion",agentVersion);
+	}
 }
